@@ -38,7 +38,7 @@ for(int i=0; i<cantVendedores; i++){
     }
 }
 
-cout<<"Vendedor que mas dinero generO: ""<<vendedores[posMaxVend].nombre_vend
+cout<<"Vendedor que mas dinero generO: "<<vendedores[posMaxVend].nombre_vend
   <<"  $"<<totPorVendedor[posMaxVend]<<endl;
 
 
@@ -89,4 +89,5 @@ cout << "Sucursal que mas dinero genero: " << sucursales[posMaxSuc]
 
 
    
+
 
