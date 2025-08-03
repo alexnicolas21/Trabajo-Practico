@@ -61,12 +61,12 @@ void mostrarVentas() {
     }
 
     Venta venta;
-    cout << "\n📊 Listado de Ventas:\n";
+    cout << "\n Listado de Ventas:\n";
     while (fread(&venta, sizeof(Venta), 1, archivo)) {
-        cout << "Venta: $" << venta.valor
-             << " | Mes: " << venta.mes
-             << " | Cod. Vendedor: " << venta.cod_vend
-             << " | Región: " << venta.region << "\n";
+        cout<< "Venta: $" << venta.valor
+            << " | Mes: " << venta.mes
+            << " | Cod. Vendedor: " << venta.cod_vend
+            << " | Región: " << venta.region << "\n";
     }
 
     fclose(archivo);
