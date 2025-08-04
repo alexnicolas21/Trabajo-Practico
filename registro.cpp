@@ -86,7 +86,7 @@ void registro(){
  }
 
 bool verif_surc( Vendedor v){
-    char sucursales[3][100] = {"Surc1", "Surc2", "Surc3"};
+    char sucursales[3][100] = {"Suc1", "Suc2", "Suc3"};
     
     for (int i = 0; i < 3; i++) {
         if (strcmp(v.nombre_surc, sucursales[i]) == 0) {

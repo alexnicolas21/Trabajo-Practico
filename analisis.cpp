@@ -44,7 +44,7 @@ cout<<"Vendedor que mas dinero generO: "<<vendedores[posMaxVend].nombre_vend
 
 //sucursal que mas dinero generó
 
-char sucursales[3][100]={"Sucursal1", "Sucursal2", "Sucursal3"}
+char sucursales[3][100]={"Suc1", "Suc2", "Suc3"}
 float totPorSucursal[3] ={0};
    for(int i=0; i<cantVendedores; i++){
    int suc=0;
@@ -107,22 +107,3 @@ for (int i = 0; i < MAX_PROD && mostrados < 10; i++) {
        mostrados++;
     }
 }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
