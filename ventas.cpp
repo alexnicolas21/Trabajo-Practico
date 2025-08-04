@@ -5,12 +5,13 @@ using namespace std;
 
 // Estructura de una venta diaria
 struct Venta {
-    int valor;
-    int mes;      // 0-11
-    int cod_vend; // se cruza con vendedores.dat
-    int region;   // 0-3
+    int cod_vend;     // Código de vendedor (valida con vendedores.dat)
+    int cod_producto; // Nuevo campo requerido
+    int valor;        // Monto de la venta
+    int fecha;        // Formato AAAAMMDD
 };
 
+// Estructura de vendedor (para validación)
 struct Vendedor {
     char nombre_vend[100];
     char nombre_surc[100];
@@ -21,6 +22,12 @@ struct Vendedor {
 void cargarVentas();
 void mostrarVentas();
 bool existeCodVendArchivo(int codigo);
+
+int main() {
+    cargarVentas();
+    mostrarVentas();
+    return 0;
+}
 
 bool existeCodVendArchivo(int codigo) {
     Vendedor vendedor;
@@ -40,7 +47,7 @@ bool existeCodVendArchivo(int codigo) {
 void cargarVentas() {
     FILE* archivo = fopen("ventas_diarias.dat", "ab"); // Append binario
     if (!archivo) {
-        cout << "❌ Error al abrir ventas_diarias.dat para escritura.\n";
+        cout << "Error al abrir ventas_diarias.dat para escritura.\n";
         return;
     }
 
@@ -49,51 +56,49 @@ void cargarVentas() {
     while (opcion == 1) {
         cout << "\n--- Nueva Venta ---\n";
 
-        cout << "Ingrese monto de la venta: ";
-        cin >> venta.valor;
-
-        do {
-            cout << "Ingrese número de mes (0 a 11): ";
-            cin >> venta.mes;
-        } while (venta.mes < 0 || venta.mes > 11);
-
         do {
             cout << "Ingrese código del vendedor (debe existir en vendedores.dat): ";
             cin >> venta.cod_vend;
             if (!existeCodVendArchivo(venta.cod_vend))
-                cout << "⚠️ Código no encontrado. Intente otro.\n";
+                cout << "Código no encontrado. Intente otro.\n";
         } while (!existeCodVendArchivo(venta.cod_vend));
 
+        cout << "Ingrese código del producto: ";
+        cin >> venta.cod_producto;
+
+        cout << "Ingrese monto de la venta: ";
+        cin >> venta.valor;
+
         do {
-            cout << "Ingrese región (0 a 3): ";
-            cin >> venta.region;
-        } while (venta.region < 0 || venta.region > 3);
+            cout << "Ingrese fecha (formato AAAAMMDD): ";
+            cin >> venta.fecha;
+        } while (venta.fecha < 19000101 || venta.fecha > 21001231); // Validación simple
 
         fwrite(&venta, sizeof(Venta), 1, archivo);
-        cout << "✅ Venta guardada.\n";
+        cout << "Venta guardada.\n";
 
         cout << "¿Desea ingresar otra venta? (1: sí, 0: no): ";
         cin >> opcion;
     }
 
     fclose(archivo);
-    cout << "\n📁 Archivo ventas_diarias.dat actualizado.\n";
+    cout << "\nArchivo ventas_diarias.dat actualizado.\n";
 }
 
 void mostrarVentas() {
     FILE* archivo = fopen("ventas_diarias.dat", "rb");
     if (!archivo) {
-        cout << "❌ Error al abrir ventas_diarias.dat para lectura.\n";
+        cout << "Error al abrir ventas_diarias.dat para lectura.\n";
         return;
     }
 
     Venta venta;
-    cout << "\n📊 Listado de Ventas:\n";
+    cout << "\nListado de Ventas:\n";
     while (fread(&venta, sizeof(Venta), 1, archivo)) {
-        cout<< "Venta: $" << venta.valor
-            << " | Mes: " << venta.mes
-            << " | Cod. Vendedor: " << venta.cod_vend
-            << " | Región: " << venta.region << "\n";
+        cout    << "Fecha: " << venta.fecha
+                << " | Vendedor: " << venta.cod_vend
+                << " | Producto: " << venta.cod_producto
+                << " | Monto: $" << venta.valor << "\n";
     }
 
     fclose(archivo);

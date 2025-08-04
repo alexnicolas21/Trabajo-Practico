@@ -5,13 +5,13 @@ using namespace std;
 struct Vendedor
 {
     char nombre_vend[100];
-    char nombre_surc[100];
+    char nombre_suc[100];
     int cod_vend;
 };
 int existeCodVend(int valor);
 void registro();
 void leerArchivo();
-bool verif_surc( Vendedor v);
+bool verif_suc( Vendedor v);
 int main()
 {
     registro();
@@ -37,19 +37,19 @@ void registro(){
             cout << "Nombre del vendedor nuevo: \n";
             cin.getline(vendedores[i].nombre_vend, sizeof(vendedores[i].nombre_vend));
 
-           
-           do
-           {
-             cout << "Nombre de la sucursal a la cual pertenece: \n";
-             cin.getline(v1.nombre_surc, sizeof(v1.nombre_surc));
-             sucursal_valida = verif_surc(v1);
-             if (!sucursal_valida) {
+
+            do
+            {
+            cout << "Nombre de la sucursal a la cual pertenece: \n";
+            cin.getline(v1.nombre_suc, sizeof(v1.nombre_suc));
+            sucursal_valida = verif_surc(v1);
+            if (!sucursal_valida) {
             cout << "La sucursal no existe. Intente nuevamente.\n";
-           }
-           } while (!sucursal_valida);
-          
-           strcpy(vendedores[i].nombre_surc, v1.nombre_surc);
-  
+            }
+            } while (!sucursal_valida);
+        
+            strcpy(vendedores[i].nombre_suc, v1.nombre_suc);
+
             // Verifica que el codigo de vendedor sea unico
             do {
                 cout << "Codigo unico del vendedor: ";
@@ -62,7 +62,7 @@ void registro(){
 
             vendedores[i].cod_vend = valor;
             cout << "Se ha guardado correctamente el vendedor! \n";
-     
+    
             // Guardar los datos en archivo binario
             if (archivo != NULL) {
                 fwrite(&vendedores[i], sizeof(Vendedor), 1, archivo);  // Escribir un vendedor
@@ -80,16 +80,16 @@ void registro(){
             }
 
             i++;
-  }
+}
     fclose(archivo);
     cout << "Archivo actualizado exitosamente.\n";
- }
+}
 
 bool verif_surc( Vendedor v){
     char sucursales[3][100] = {"Suc1", "Suc2", "Suc3"};
     
     for (int i = 0; i < 3; i++) {
-        if (strcmp(v.nombre_surc, sucursales[i]) == 0) {
+        if (strcmp(v.nombre_suc, sucursales[i]) == 0) {
             return true;
         }
     }
@@ -110,7 +110,7 @@ int existeCodVend(int valor){
     }
     fclose(archivo);
     return 0;  // Si el código no existe retorna 0
- } 
+} 
 
 void leerArchivo() {
     FILE* archivo = fopen("vendedores.dat", "rb");
@@ -122,7 +122,7 @@ void leerArchivo() {
     Vendedor vendedor;
     while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
         cout << "Vendedor: " << vendedor.nombre_vend << " | ";
-        cout << "Sucursal: " << vendedor.nombre_surc << " | ";
+        cout << "Sucursal: " << vendedor.nombre_suc << " | ";
         cout << "Codigo: " << vendedor.cod_vend << endl;
     }
 
