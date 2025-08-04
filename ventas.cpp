@@ -32,10 +32,11 @@ int main() {
 bool existeCodVendArchivo(int codigo) {
     Vendedor vendedor;
     FILE* archivo = fopen("vendedores.dat", "rb");
-        if (!archivo) {
+
+    if (!archivo) {
         cout << "Archivo vendedores.dat no encontrado. No se puede validar el código de vendedor.\n";
         return false;
-        }
+    }
 
     while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
         if (vendedor.cod_vend == codigo) {
@@ -43,6 +44,7 @@ bool existeCodVendArchivo(int codigo) {
             return true;
         }
     }
+
     fclose(archivo);
     return false;
 }
@@ -56,15 +58,18 @@ void cargarVentas() {
 
     Venta venta;
     int opcion = 1;
+
     while (opcion == 1) {
         cout << "\n--- Nueva Venta ---\n";
 
+        bool valido;
         do {
             cout << "Ingrese código del vendedor (debe existir en vendedores.dat): ";
             cin >> venta.cod_vend;
-            if (!existeCodVendArchivo(venta.cod_vend))
+            valido = existeCodVendArchivo(venta.cod_vend);
+            if (!valido)
                 cout << "Código no encontrado. Intente otro.\n";
-        } while (!existeCodVendArchivo(venta.cod_vend));
+        } while (!valido);
 
         cout << "Ingrese código del producto: ";
         cin >> venta.cod_producto;
