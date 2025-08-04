@@ -7,66 +7,93 @@ using namespace std;
 struct Vendedor {
 int cod_vent;
 char nombre_vend[100];
-char nombre_sucur[100];
+char nombre_suc[100];
 };
 
-struct Venta  {
-int valor;
-int mes;
+struct Venta {
 int cod_vend;
-int region;
+int cod_producto;
+int valor;
+int fecha;
 };
 
-//vendedor que mas dinero generó
 
-float totPorVendedor[50]= {0};
+int main (){
 
-for(int i =0; i< cantVentas;i++){
-     for (int j=0; j<cantVendedores; j++) {
-        if (ventas[i].cod_vend == vendedores[j].cod_vend) {
-             totPorVendedor[j] += ventas[i].valor;
-        break;
+Vendedor vendedores [50];
+int cantVendedores=0;
+FILE* archVend=fopen("vendedores.dat", "rb");
+    if (archvVend!=NULL) {
+       while(fread(&vendedores[cantVendedores], sizeof(Vendedor), 1, archVend)==1){
+       cantVendedores++
+          }
+
+fclose (archVend);
+} else { 
+     cout<<"no se pudo abrir vendedores.dat"<<endl;
+return 1;
+       }
+
+
+Venta ventas[1000];
+int cantVentas =0;
+FILE* archVentas=fopen("ventas_diarias.dat", "rb");
+     if (archVentas!=NULL){
+       while(fread(&ventas[cantVentas], sizeof(Ventas), 1, archVentas)==1){
+       cantVentas++
      }
-  }
-}
-
-int posMaxVend =0;
-
-for(int i=0; i<cantVendedores; i++){
-  if (totPorVendedor[i] > totPorVendedor[posMaxVend]){
-       posMaxVend = i;
-    }
-}
-
-cout<<"Vendedor que mas dinero generO: "<<vendedores[posMaxVend].nombre_vend
-  <<"  $"<<totPorVendedor[posMaxVend]<<endl;
+fclose (archVentas);
+} else { 
+     cout<<"no se pudo abrir ventas_diarias.dat"<<endl;
+       return 1;
+       }
 
 
-//sucursal que mas dinero generó
+//VENDEDOR QUE MAS DINERO GENERÓ
 
-char sucursales[3][100]={"Suc1", "Suc2", "Suc3"}
-float totPorSucursal[3] ={0};
-   for(int i=0; i<cantVendedores; i++){
-   int suc=0;
-     for(int j=0; j<3; j++){
-       if (strcmp(vendedores[i].nombre_sucur, sucursales[j]) == 0) {
-         suc = j;
-         break;
+int totPorVendedor[50]={0};
+      for(int i=0; i< cantVentas; i++){
+        for(int j=0; j< cantVendedores; j++){
+          if(ventas[i].cod_vend==vendedores[j].cod_vend){
+          totPorVendedor[j]+=ventas[i].valor;
+             break;
+              }
          }
-        }
-     totPorSucursal[suc] += totPorVendedor[i];
     }
-int posMaxSuc = 0;
- for (int i = 1; i < 3; i++) {
-   if (totPorSucursal[i] > totPorSucursal[posMaxSuc]) {
-        posMaxSuc = i;
-     }
-  }
-cout << "Sucursal que mas dinero genero: " << sucursales[posMaxSuc]
-      << "  $" << totPorSucursal[posMaxSuc] << endl;
+int posMaxVend=0;
+    for(int i=1; i<cantVendedores; i++){
+      if (totPorVendedor[i] > totPorVendedor[posMaxVend]) {
+          posMaxVend = i;
+        }
+   }
+    cout << "Vendedor que mas dinero genero: " << vendedores[posMaxVend].nombre_vend
+         << "  $" << totPorVendedor[posMaxVend] << endl;
 
-    return 0;
-}
+//SUCURSAL QUE MAS DINERO GENERÓ
+
+char sucursales[3][100] = {"Suc1", "Suc2", "Suc3"};
+int totPorSucursal[3] = {0};
+    for (int i = 0; i < cantVendedores; i++) {
+int suc = 0;
+    for (int j = 0; j < 3; j++) {
+      if (strcmp(vendedores[i].nombre_suc, sucursales[j]) == 0) {
+           suc = j;
+           break;
+              }
+        }
+ totPorSucursal[suc] += totPorVendedor[i];
+    }
+    int posMaxSuc = 0;
+    for (int i = 1; i < 3; i++) {
+        if (totPorSucursal[i] > totPorSucursal[posMaxSuc]) {
+            posMaxSuc = i;
+        }
+    }
+    cout << "Sucursal que mas dinero genero: " << sucursales[posMaxSuc]
+         << "  $" << totPorSucursal[posMaxSuc] << endl;
+
+
+
 
 // RANKING DE RPODUCTOS
 
@@ -107,3 +134,4 @@ for (int i = 0; i < MAX_PROD && mostrados < 10; i++) {
        mostrados++;
     }
 }
+
