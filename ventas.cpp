@@ -14,7 +14,7 @@ struct Venta {
 // Estructura de vendedor (para validación)
 struct Vendedor {
     char nombre_vend[100];
-    char nombre_surc[100];
+    char nombre_suc[100];
     int cod_vend;
 };
 
@@ -32,7 +32,10 @@ int main() {
 bool existeCodVendArchivo(int codigo) {
     Vendedor vendedor;
     FILE* archivo = fopen("vendedores.dat", "rb");
-    if (!archivo) return false;
+        if (!archivo) {
+        cout << "Archivo vendedores.dat no encontrado. No se puede validar el código de vendedor.\n";
+        return false;
+        }
 
     while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
         if (vendedor.cod_vend == codigo) {
