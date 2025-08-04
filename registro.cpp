@@ -85,7 +85,7 @@ void registro(){
     cout << "Archivo actualizado exitosamente.\n";
 }
 
-bool verif_surc( Vendedor v){
+bool verif_suc( Vendedor v){
     char sucursales[3][100] = {"Suc1", "Suc2", "Suc3"};
     
     for (int i = 0; i < 3; i++) {
