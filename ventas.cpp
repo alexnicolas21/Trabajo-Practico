@@ -68,10 +68,10 @@ void cargarVentas() {
             cin >> venta.cod_vend;
             valido = existeCodVendArchivo(venta.cod_vend);
             if (!valido)
-                cout << "Codigo no encontrado. Intente otro.\n";
+                cout << "Código no encontrado. Intente otro.\n";
         } while (!valido);
 
-        cout << "Ingrese codigo del producto: ";
+        cout << "Ingrese código del producto: ";
         cin >> venta.cod_producto;
 
         cout << "Ingrese monto de la venta: ";
@@ -85,7 +85,7 @@ void cargarVentas() {
         fwrite(&venta, sizeof(Venta), 1, archivo);
         cout << "Venta guardada.\n";
 
-        cout << "Desea ingresar otra venta? (1: si, 0: no): ";
+        cout << "¿Desea ingresar otra venta? (1: sí, 0: no): ";
         cin >> opcion;
     }
 
