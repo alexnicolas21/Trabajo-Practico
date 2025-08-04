@@ -42,7 +42,7 @@ void registro(){
             {
             cout << "Nombre de la sucursal a la cual pertenece: \n";
             cin.getline(v1.nombre_suc, sizeof(v1.nombre_suc));
-            sucursal_valida = verif_surc(v1);
+            sucursal_valida = verif_suc(v1);
             if (!sucursal_valida) {
             cout << "La sucursal no existe. Intente nuevamente.\n";
             }
