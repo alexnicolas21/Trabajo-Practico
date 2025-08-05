@@ -152,7 +152,7 @@ void leerYOrdenarArchivo() {
     ordenamiento_De_Vendedores(vendedores, len);
 
     // Mostrar
-    cout << "\nLista de vendedores ordenada por código:\n";
+    cout << "\nLista de vendedores ordenada por codigo:\n";
     for (int i = 0; i < len; i++) {
         cout << "Vendedor: " << vendedores[i].nombre_vend << " | ";
         cout << "Sucursal: " << vendedores[i].nombre_suc << " | ";
