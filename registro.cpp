@@ -43,7 +43,7 @@ void registro(){
      int j = contarVendedoresEnArchivo();
 
       if (j >= 15) {
-        cout << "La lista ya está llena.\n";
+        cout << "La lista ya esta llena.\n";
         return;
       }  
 
@@ -152,7 +152,7 @@ void leerYOrdenarArchivo() {
     ordenamiento_De_Vendedores(vendedores, len);
 
     // Mostrar
-    cout << "\nLista de vendedores ordenada por código:\n";
+    cout << "\nLista de vendedores ordenada por codigo:\n";
     for (int i = 0; i < len; i++) {
         cout << "Vendedor: " << vendedores[i].nombre_vend << " | ";
         cout << "Sucursal: " << vendedores[i].nombre_suc << " | ";
