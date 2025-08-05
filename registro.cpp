@@ -8,14 +8,26 @@ struct Vendedor
     char nombre_suc[100];
     int cod_vend;
 };
+
 int existeCodVend(int valor);
+void ordenamiento_De_Vendedores(Vendedor vend[15], int len);
+int contarVendedoresEnArchivo();
+void leerYOrdenarArchivo();
 void registro();
 void leerArchivo();
 bool verif_suc( Vendedor v);
 int main()
-{
+{   
+    leerYOrdenarArchivo();
+    int i = contarVendedoresEnArchivo();
+    if (i >= 15)
+    {
+        cout << "La lista esta llena.\n";
+    }else{
+    cout << "Hay lugar para registrar mas vendedores.\n";
     registro();
-    leerArchivo();
+    }
+    leerYOrdenarArchivo();
     return 0;
 }
 
@@ -27,6 +39,14 @@ void registro(){
     bool salir = false;
     Vendedor v1;
     Vendedor vendedores[15];
+     
+     int j = contarVendedoresEnArchivo();
+
+      if (j >= 15) {
+        cout << "La lista ya está llena.\n";
+        return;
+      }  
+
 
     FILE* archivo = fopen("vendedores.dat", "ab");  // Modo binario (append)
     if (archivo == NULL) {
@@ -112,19 +132,60 @@ int existeCodVend(int valor){
     return 0;  // Si el código no existe retorna 0
 } 
 
-void leerArchivo() {
-    FILE* archivo = fopen("vendedores.dat", "rb");
+void leerYOrdenarArchivo() {
+    Vendedor vendedores[15];
+    int len = 0;
 
+    FILE* archivo = fopen("vendedores.dat", "rb");
     if (archivo == NULL) {
-        cout << "Error al abrir el archivo";
+        cout << "Error al abrir el archivo.\n";
+        return;
     }
-    cout << "Lista de vendedores: \n";
+
+    // Leer vendedores del archivo
+    while (fread(&vendedores[len], sizeof(Vendedor), 1, archivo) == 1 && len < 15) {
+        len++;
+    }
+    fclose(archivo);
+
+    // Ordenar
+    ordenamiento_De_Vendedores(vendedores, len);
+
+    // Mostrar
+    cout << "\nLista de vendedores ordenada por código:\n";
+    for (int i = 0; i < len; i++) {
+        cout << "Vendedor: " << vendedores[i].nombre_vend << " | ";
+        cout << "Sucursal: " << vendedores[i].nombre_suc << " | ";
+        cout << "Codigo: " << vendedores[i].cod_vend << endl;
+    }
+}
+// Ordenamiento simple
+void ordenamiento_De_Vendedores(Vendedor vend[15], int len) {
+       for (int i = 0; i < len - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < len; j++) {
+         if (vend[j].cod_vend < vend[minIndex].cod_vend) {
+             minIndex = j;
+         }
+        }
+         Vendedor temp = vend[i];
+          vend[i] = vend[minIndex];
+          vend[minIndex].cod_vend = temp.cod_vend;
+  }
+}
+
+int contarVendedoresEnArchivo() {
+    FILE* archivo = fopen("vendedores.dat", "rb");
+       if (archivo == NULL) {
+        return 0; 
+       }
+
     Vendedor vendedor;
-    while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
-        cout << "Vendedor: " << vendedor.nombre_vend << " | ";
-        cout << "Sucursal: " << vendedor.nombre_suc << " | ";
-        cout << "Codigo: " << vendedor.cod_vend << endl;
-    }
+    int contador = 0;
+      while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
+        contador++;
+      }
 
     fclose(archivo);
+    return contador;
 }
