@@ -23,9 +23,9 @@ int main (){
 Vendedor vendedores [50];
 int cantVendedores=0;
 FILE* archVend=fopen("vendedores.dat", "rb");
-    if (archvVend!=NULL) {
+    if (archVend!=NULL) {
        while(fread(&vendedores[cantVendedores], sizeof(Vendedor), 1, archVend)==1){
-       cantVendedores++
+       cantVendedores++;
           }
 
 fclose (archVend);
@@ -39,8 +39,8 @@ Venta ventas[1000];
 int cantVentas =0;
 FILE* archVentas=fopen("ventas_diarias.dat", "rb");
      if (archVentas!=NULL){
-       while(fread(&ventas[cantVentas], sizeof(Ventas), 1, archVentas)==1){
-       cantVentas++
+       while(fread(&ventas[cantVentas], sizeof(Venta), 1, archVentas)==1){
+       cantVentas++;
      }
 fclose (archVentas);
 } else { 
@@ -54,7 +54,7 @@ fclose (archVentas);
 int totPorVendedor[50]={0};
       for(int i=0; i< cantVentas; i++){
         for(int j=0; j< cantVendedores; j++){
-          if(ventas[i].cod_vend==vendedores[j].cod_vend){
+          if(ventas[i].cod_vend==vendedores[j].cod_vent){
           totPorVendedor[j]+=ventas[i].valor;
              break;
               }
@@ -100,7 +100,7 @@ int suc = 0;
 const int MAX_PROD = 1000; // rango esperado de productos
 int productos[MAX_PROD] = {0};  // indice = cod_producto, valor = cantidad de veces vendido
 
-for (int i = 0; i < cantVentas; i++ {
+for (int i = 0; i < cantVentas; i++) {
     int cod = ventas [i].cod_producto;
     if (cod >=0 && cod < MAX_PROD) {
         productos[cod]++;
@@ -135,3 +135,4 @@ for (int i = 0; i < MAX_PROD && mostrados < 10; i++) {
     }
 }
 
+}
