@@ -43,7 +43,7 @@ void registro(){
      int j = contarVendedoresEnArchivo();
 
       if (j >= 15) {
-        cout << "La lista ya está llena.\n";
+        cout << "La lista ya esta llena.\n";
         return;
       }  
 
