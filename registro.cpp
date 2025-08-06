@@ -10,7 +10,6 @@ struct Vendedor
 };
 
 int existeCodVend(int valor);
-void ordenamiento_De_Vendedores(Vendedor vend[15], int len);
 int contarVendedoresEnArchivo();
 void leerYOrdenarArchivo();
 void registro();
@@ -54,6 +53,7 @@ void registro(){
     }
     // Carga de vendedor
     while (!salir){
+        
             cout << "Nombre del vendedor nuevo: \n";
             cin.getline(vendedores[i].nombre_vend, sizeof(vendedores[i].nombre_vend));
 
@@ -148,9 +148,6 @@ void leerYOrdenarArchivo() {
     }
     fclose(archivo);
 
-    // Ordenar
-    ordenamiento_De_Vendedores(vendedores, len);
-
     // Mostrar
     cout << "\nLista de vendedores ordenada por codigo:\n";
     for (int i = 0; i < len; i++) {
@@ -159,20 +156,7 @@ void leerYOrdenarArchivo() {
         cout << "Codigo: " << vendedores[i].cod_vend << endl;
     }
 }
-// Ordenamiento simple
-void ordenamiento_De_Vendedores(Vendedor vend[15], int len) {
-       for (int i = 0; i < len - 1; i++) {
-        int minIndex = i;
-        for (int j = i + 1; j < len; j++) {
-         if (vend[j].cod_vend < vend[minIndex].cod_vend) {
-             minIndex = j;
-         }
-        }
-         Vendedor temp = vend[i];
-          vend[i] = vend[minIndex];
-          vend[minIndex].cod_vend = temp.cod_vend;
-  }
-}
+
 
 int contarVendedoresEnArchivo() {
     FILE* archivo = fopen("vendedores.dat", "rb");
