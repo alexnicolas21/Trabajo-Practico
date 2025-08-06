@@ -1,14 +1,6 @@
 #include <iostream>
-#include <cstdio>
 #include <cstring>
 using namespace std;
-
-struct Venta {
-    int cod_vend;
-    int cod_producto;
-    int valor;
-    int fecha;
-};
 
 struct Vendedor {
     int cod_vend;
@@ -16,88 +8,136 @@ struct Vendedor {
     char nombre_suc[100];
 };
 
-bool existeCodVendArchivo(int codigo);
-void cargarVentas();
-void mostrarVentas();
+int existeCodVend(int valor);
+int contarVendedoresEnArchivo();
+void leerYOrdenarArchivo();
+void registro();
+bool verif_suc(const char suc[]);
 
 int main() {
-    cargarVentas();
-    mostrarVentas();
+    leerYOrdenarArchivo();
+    int i = contarVendedoresEnArchivo();
+    if (i >= 15) {
+        cout << "La lista esta llena.\n";
+    } else {
+        cout << "Hay lugar para registrar mas vendedores.\n";
+        registro();
+    }
+    leerYOrdenarArchivo();
     return 0;
 }
 
-bool existeCodVendArchivo(int codigo) {
-    Vendedor vendedor;
-    FILE* archivo = fopen("vendedores.dat", "rb");
-    if (!archivo) return false;
+void registro() {
+    int opcion;
+    int valor;
+    bool salir = false;
+    Vendedor v1;
 
-    while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
-        if (vendedor.cod_vend == codigo) {
-            fclose(archivo);
+    FILE* archivo = fopen("vendedores.dat", "ab");
+    if (archivo == NULL) {
+        cout << "Error al abrir el archivo para escritura.";
+        return;
+    }
+
+    while (!salir) {
+        cout << "Nombre del vendedor nuevo: \n";
+        cin.getline(v1.nombre_vend, sizeof(v1.nombre_vend));
+
+        do {
+            cout << "Nombre de la sucursal a la cual pertenece: \n";
+            cin.getline(v1.nombre_suc, sizeof(v1.nombre_suc));
+            if (!verif_suc(v1.nombre_suc)) {
+                cout << "La sucursal no existe. Intente nuevamente.\n";
+            }
+        } while (!verif_suc(v1.nombre_suc));
+
+        do {
+            cout << "Codigo unico del vendedor: ";
+            cin >> valor;
+            cin.ignore();
+            if (existeCodVend(valor)) {
+                cout << "El codigo ya existe. Intente nuevamente.\n";
+            }
+        } while (existeCodVend(valor));
+
+        v1.cod_vend = valor;
+
+        fwrite(&v1, sizeof(Vendedor), 1, archivo);
+        cout << "Se ha guardado correctamente el vendedor!\n";
+
+        cout << "Si quiere ingresar otro vendedor ingrese (1) o si quiere salir ingrese (0)\n";
+        cin >> opcion;
+        cin.ignore();
+
+        if (opcion == 0) {
+            cout << "Saliendo del programa...\n";
+            salir = true;
+        }
+    }
+
+    fclose(archivo);
+    cout << "Archivo actualizado exitosamente.\n";
+}
+
+bool verif_suc(const char suc[]) {
+    char sucursales[3][100] = {"Suc1", "Suc2", "Suc3"};
+    for (int i = 0; i < 3; i++) {
+        if (strcmp(suc, sucursales[i]) == 0) {
             return true;
         }
     }
-    fclose(archivo);
     return false;
 }
 
-void cargarVentas() {
-    FILE* archivo = fopen("ventas_diarias.dat", "ab");
-    if (!archivo) {
-        cout << "Error al abrir ventas_diarias.dat\n";
-        return;
-    }
+int existeCodVend(int valor) {
+    Vendedor vendedor;
+    FILE* archivo = fopen("vendedores.dat", "rb");
+    if (archivo == NULL) return 0;
 
-    Venta venta;
-    int opcion = 1;
-
-    while (opcion == 1) {
-        cout << "\n--- Nueva Venta ---\n";
-
-        do {
-            cout << "Ingrese codigo del vendedor (debe existir en vendedores.dat): ";
-            cin >> venta.cod_vend;
-            if (!existeCodVendArchivo(venta.cod_vend))
-                cout << "Codigo no encontrado. Intente otro.\n";
-        } while (!existeCodVendArchivo(venta.cod_vend));
-
-        cout << "Ingrese codigo del producto: ";
-        cin >> venta.cod_producto;
-
-        cout << "Ingrese monto de la venta: ";
-        cin >> venta.valor;
-
-        do {
-            cout << "Ingrese fecha (formato AAAAMMDD): ";
-            cin >> venta.fecha;
-        } while (venta.fecha < 19000101 || venta.fecha > 21001231);
-
-        fwrite(&venta, sizeof(Venta), 1, archivo);
-        cout << "Venta guardada.\n";
-
-        cout << "Desea ingresar otra venta? (1: si, 0: no): ";
-        cin >> opcion;
+    while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
+        if (vendedor.cod_vend == valor) {
+            fclose(archivo);
+            return 1;
+        }
     }
 
     fclose(archivo);
-    cout << "\nArchivo ventas_diarias.dat actualizado.\n";
+    return 0;
 }
 
-void mostrarVentas() {
-    FILE* archivo = fopen("ventas_diarias.dat", "rb");
-    if (!archivo) {
-        cout << "Error al abrir ventas_diarias.dat\n";
+void leerYOrdenarArchivo() {
+    Vendedor vendedores[15];
+    int len = 0;
+
+    FILE* archivo = fopen("vendedores.dat", "rb");
+    if (archivo == NULL) {
+        cout << "Error al abrir el archivo.\n";
         return;
     }
 
-    Venta venta;
-    cout << "\nListado de Ventas:\n";
-    while (fread(&venta, sizeof(Venta), 1, archivo)) {
-        cout << "Fecha: " << venta.fecha
-             << " | Vendedor: " << venta.cod_vend
-             << " | Producto: " << venta.cod_producto
-             << " | Monto: $" << venta.valor << "\n";
+    while (fread(&vendedores[len], sizeof(Vendedor), 1, archivo) == 1 && len < 15) {
+        len++;
     }
-
     fclose(archivo);
+
+    // Mostrar
+    cout << "\nLista de vendedores ordenada por codigo:\n";
+    for (int i = 0; i < len; i++) {
+        cout << "Vendedor: " << vendedores[i].nombre_vend
+             << " | Sucursal: " << vendedores[i].nombre_suc
+             << " | Codigo: " << vendedores[i].cod_vend << endl;
+    }
+}
+
+int contarVendedoresEnArchivo() {
+    FILE* archivo = fopen("vendedores.dat", "rb");
+    if (archivo == NULL) return 0;
+
+    int contador = 0;
+    Vendedor vendedor;
+    while (fread(&vendedor, sizeof(Vendedor), 1, archivo) == 1) {
+        contador++;
+    }
+    fclose(archivo);
+    return contador;
 }
